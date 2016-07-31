@@ -2,6 +2,10 @@ import org.soulwing.crypt4j.Crypt;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -12,10 +16,12 @@ public class Cracker {
 
     private Hashtable<String, String> dictionary;
     private ArrayList<String> users;
+    private ArrayList<String> results;
 
     public Cracker() {
         this.dictionary = new Hashtable<>();
         this.users = new ArrayList<>();
+        this.results = new ArrayList<>();
     }
 
     /**
@@ -87,10 +93,16 @@ public class Cracker {
                     }
 
                     if ( this.dictionary.containsKey(passwordArray[3]) ) {
-                        System.out.println("User: " + temp[0] + " - Password: " + this.dictionary.get(passwordArray[3]));
+                        String result = "User: " + temp[0] + " - Password: " + this.dictionary.get(passwordArray[3]);
+                        System.out.println(result);
+                        this.results.add(result);
                     } else {
-                        System.out.println("User: " + temp[0] + " - Password: Not Found");
+                        String result = ("User: " + temp[0] + " - Password: Not Found");
+                        System.out.println(result);
+                        this.results.add(result);
                     }
+
+                    this.writeFile("/result.txt");
                 }
             }
         } catch ( Exception e ) {
@@ -140,6 +152,15 @@ public class Cracker {
             } catch ( Exception ex ) {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    private void writeFile(String fileName) {
+        try {
+            Path path = Paths.get(fileName);
+            Files.write(path, this.results, Charset.forName("UTF-8"));
+        } catch ( Exception e ) {
+            e.printStackTrace();
         }
     }
 }

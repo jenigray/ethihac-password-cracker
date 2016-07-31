@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="FileController">
+    <top>
+        <AnchorPane BorderPane.alignment="CENTER">
+            <children>
+                <VBox prefHeight="93.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="0.0"
+                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <HBox>
+                            <children>
+                                <Pane prefWidth="10.0"/>
+                                <Label alignment="CENTER" text="Linux File Password Cracker" textAlignment="CENTER">
+                                    <font>
+                                        <Font name="Trebuchet MS Bold" size="15.0"/>
+                                    </font>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="10.0">
+                            <children>
+                                <TextArea editable="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="60.0"
+                                          prefWidth="610.0"
+                                          text="This application requires you to choose your linux password, shadow password and dictionary file paths for it to execute based on your preference."
+                                          wrapText="true">
+                                    <font>
+                                        <Font name="Trebuchet MS" size="13.0"/>
+                                    </font>
+                                </TextArea>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets top="10.0"/>
+                    </padding>
+                </VBox>
+            </children>
+        </AnchorPane>
+    </top>
+    <center>
+        <AnchorPane BorderPane.alignment="CENTER">
+            <VBox prefHeight="454.0" prefWidth="1013.0" spacing="30.0" AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <children>
+                    <HBox spacing="25.0">
+                        <children>
+                            <Label alignment="CENTER" prefWidth="150.0" text="Linux Password File"
+                                   textAlignment="CENTER"/>
+                            <ChoiceBox fx:id="passwordChoiceBox" prefWidth="300.0"/>
+                            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                                    onAction="#handleLocatePassword" text="Locate"/>
+                        </children>
+                    </HBox>
+                    <HBox layoutX="10.0" layoutY="10.0" spacing="25.0">
+                        <children>
+                            <Label alignment="CENTER" prefWidth="150.0" text="Shadow Password File"
+                                   textAlignment="CENTER"/>
+                            <ChoiceBox fx:id="shadowChoiceBox" prefWidth="300.0"/>
+                            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                                    onAction="#handleLocateShadow" text="Locate"/>
+                        </children>
+                    </HBox>
+                    <HBox layoutX="10.0" layoutY="110.0" spacing="25.0">
+                        <children>
+                            <Label alignment="CENTER" prefWidth="150.0" text="Dictionary File"
+                                   textAlignment="CENTER"/>
+                            <ChoiceBox fx:id="dictionaryChoiceBox" prefWidth="300.0"/>
+                            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                                    onAction="#handleLocateDictionary" text="Locate"/>
+                        </children>
+                    </HBox>
+                </children>
+                <padding>
+                    <Insets left="20.0" right="20.0" top="45.0"/>
+                </padding>
+            </VBox>
+        </AnchorPane>
+    </center>
+    <bottom>
+        <AnchorPane BorderPane.alignment="CENTER">
+            <children>
+                <HBox prefHeight="62.0" prefWidth="600.0" spacing="25.0" AnchorPane.bottomAnchor="0.0"
+                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                                onAction="#handleCancel" prefWidth="65.0" text="Cancel"/>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleRun"
+                                prefWidth="65.0" text="Run"/>
+                    </children>
+                    <padding>
+                        <Insets bottom="35.0" left="425.0"/>
+                    </padding>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </bottom>
+</BorderPane>

@@ -1,11 +1,11 @@
 import org.soulwing.crypt4j.Crypt;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -102,7 +102,7 @@ public class Cracker {
                         this.results.add(result);
                     }
 
-                    this.writeFile("/result.txt");
+                    this.writeToFile("result.txt");
                 }
             }
         } catch ( Exception e ) {
@@ -155,9 +155,10 @@ public class Cracker {
         }
     }
 
-    private void writeFile(String fileName) {
+    private void writeToFile(String fileName) {
         try {
-            Path path = Paths.get(fileName);
+            File file = new File(fileName);
+            Path path = file.toPath();
             Files.write(path, this.results, Charset.forName("UTF-8"));
         } catch ( Exception e ) {
             e.printStackTrace();

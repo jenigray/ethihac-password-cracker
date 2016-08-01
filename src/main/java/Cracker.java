@@ -24,12 +24,17 @@ public class Cracker {
         this.results = new ArrayList<>();
     }
 
+    public boolean build(ArrayList<String> filePaths) {
+        this.buildUserList(filePaths.get(0));
+        return this.buildCrack(filePaths.get(1), filePaths.get(2));
+    }
+
     /**
      * Reading the Linux Password File containing the User Accounts
      *
      * @param filePath
      */
-    public void buildUserList(String filePath) {
+    public boolean buildUserList(String filePath) {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(filePath));
@@ -40,7 +45,7 @@ public class Cracker {
                 String[] temp = account.split(":");
 
                 // debugging
-                System.out.println("temp[2] = " + temp[2]);
+//                System.out.println("temp[2] = " + temp[2]);
 
                 Float userId = Float.parseFloat(temp[2]);
                 if ( userId > 1000 && userId < 60000 ) {
@@ -48,14 +53,19 @@ public class Cracker {
                     this.users.add(temp[0]);
                 }
             }
+
+            return true;
         } catch ( Exception e ) {
             e.printStackTrace();
+            return false;
         } finally {
             try {
                 if ( br != null )
                     br.close();
+                return true;
             } catch ( Exception ex ) {
                 ex.printStackTrace();
+                return false;
             }
         }
     }
@@ -65,7 +75,7 @@ public class Cracker {
      * @param shadowPath
      * @param dictionaryPath
      */
-    public void buildCrack(String shadowPath, String dictionaryPath) {
+    public boolean buildCrack(String shadowPath, String dictionaryPath) {
         BufferedReader br = null;
 
         try {
@@ -93,11 +103,11 @@ public class Cracker {
                     }
 
                     if ( this.dictionary.containsKey(passwordArray[3]) ) {
-                        String result = "User: " + temp[0] + " - Password: " + this.dictionary.get(passwordArray[3]);
+                        String result = "User: " + temp[0] + " -- Password: " + this.dictionary.get(passwordArray[3]);
                         System.out.println(result);
                         this.results.add(result);
                     } else {
-                        String result = ("User: " + temp[0] + " - Password: Not Found");
+                        String result = ("User: " + temp[0] + " -- Password: Not Found");
                         System.out.println(result);
                         this.results.add(result);
                     }
@@ -105,14 +115,19 @@ public class Cracker {
                     this.writeToFile("result.txt");
                 }
             }
+
+            return true;
         } catch ( Exception e ) {
             e.printStackTrace();
+            return false;
         } finally {
             try {
                 if ( br != null )
                     br.close();
+                return true;
             } catch ( Exception ex ) {
                 ex.printStackTrace();
+                return false;
             }
         }
     }
@@ -163,5 +178,9 @@ public class Cracker {
         } catch ( Exception e ) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<String> getResults() {
+        return this.results;
     }
 }

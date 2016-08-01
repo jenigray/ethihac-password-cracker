@@ -1,9 +1,10 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -102,7 +103,35 @@ public class FileController {
     @FXML
     private void handleRun(ActionEvent event) {
         Cracker cracker = new Cracker();
-        cracker.buildUserList(getFilePaths().get(0));
-        cracker.buildCrack(getFilePaths().get(1), getFilePaths().get(2));
+        boolean build = cracker.build(this.getFilePaths());
+
+        TextArea resultTextArea = new TextArea();
+        resultTextArea.setWrapText(true);
+        resultTextArea.setEditable(false);
+        resultTextArea.getStylesheets().add(FileController.class.getResource("result-text-area.css").toExternalForm());
+        ScrollPane scrollPane = new ScrollPane(resultTextArea);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        StackPane root = new StackPane(scrollPane);
+        Scene scene = new Scene(root, 600, 400);
+
+        if (build) {
+            String finalStr = "";
+            for ( String result : cracker.getResults() ) {
+                finalStr += result + "\n";
+            }
+
+            resultTextArea.setText(finalStr);
+        } else {
+
+        }
+
+        Stage resultStage = new Stage();
+        resultStage.setTitle("Result");
+        resultStage.initModality(Modality.APPLICATION_MODAL);
+        resultStage.setResizable(false);
+        resultStage.centerOnScreen();
+        resultStage.setScene(scene);
+        resultStage.show();
     }
 }

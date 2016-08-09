@@ -126,14 +126,14 @@ public class Cracker {
                         if ( this.dictionary.containsKey(passwordArray[3]) ) {
                             String result = "User: " + temp[0] + " -- Password: " + this.dictionary.get(passwordArray[3])
                                     + "\nCrack Time: " + resultTime + " sec"
-                                    + "\n******************************";
+                                    + "\n**************************************************";
 
                             System.out.println(result);
                             this.results.add(result);
                         } else {
                             String result = "User: " + temp[0] + " -- Password: Not Found"
                                     + "\nCrack Time: " + resultTime + " sec"
-                                    + "\n******************************";
+                                    + "\n**************************************************";
 
                             System.out.println(result);
                             this.results.add(result);

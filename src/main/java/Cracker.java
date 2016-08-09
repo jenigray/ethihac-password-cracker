@@ -56,7 +56,8 @@ public class Cracker {
                 String[] temp = account.split(":");
 
                 Float userId = Float.parseFloat(temp[2]);
-                if ( userId > 1000 && userId < 60000 ) {
+//                if ( userId > 1000 && userId < 60000 ) {
+                if ( userId > 1000 ) {
                     // Adding the username
                     this.users.add(temp[0]);
                 }
@@ -101,41 +102,45 @@ public class Cracker {
                 if ( this.users.contains(temp[0]) ) {
                     // temp[1] is the salt & hashed password
                     passwordHash = temp[1];
-                    passwordArray = passwordHash.split("\\$");
-                    tempType = Integer.parseInt(passwordArray[1]);
 
-                    if ( passwordArray.length < 3 ) {
-                        this.buildDictionaryTable(dictionaryPath, "", 0);
-                    } else {
-                        salt = passwordArray[2];
-                        buildDictionaryTable(dictionaryPath, salt, tempType);
+                    // check if the salt & hashed password is a SHA-512
+                    if ( passwordHash.substring(0, 1).equals("$") ) {
+                        passwordArray = passwordHash.split("\\$");
+                        tempType = Integer.parseInt(passwordArray[1]);
+
+                        if ( passwordArray.length < 3 ) {
+                            this.buildDictionaryTable(dictionaryPath, "", 0);
+                        } else {
+                            salt = passwordArray[2];
+                            this.buildDictionaryTable(dictionaryPath, salt, tempType);
+                        }
+
+                        this.endTime = System.nanoTime();
+                        this.elapsedTime = this.endTime - this.startTime;
+
+                        double convert = TimeUnit.MILLISECONDS
+                                .convert(this.elapsedTime, TimeUnit.NANOSECONDS) / 1000.0;
+                        double resultTime = convert - this.runningTime;
+                        this.runningTime = convert;
+
+                        if ( this.dictionary.containsKey(passwordArray[3]) ) {
+                            String result = "User: " + temp[0] + " -- Password: " + this.dictionary.get(passwordArray[3])
+                                    + "\nCrack Time: " + resultTime + " sec"
+                                    + "\n******************************";
+
+                            System.out.println(result);
+                            this.results.add(result);
+                        } else {
+                            String result = "User: " + temp[0] + " -- Password: Not Found"
+                                    + "\nCrack Time: " + resultTime + " sec"
+                                    + "\n******************************";
+
+                            System.out.println(result);
+                            this.results.add(result);
+                        }
+
+                        this.writeToFile("result/result.txt");
                     }
-
-                    this.endTime = System.nanoTime();
-                    this.elapsedTime = this.endTime - this.startTime;
-
-                    double convert = TimeUnit.MILLISECONDS
-                            .convert(this.elapsedTime, TimeUnit.NANOSECONDS) / 1000.0;
-                    double resultTime = convert - this.runningTime;
-                    this.runningTime = convert;
-
-                    if ( this.dictionary.containsKey(passwordArray[3]) ) {
-                        String result = "User: " + temp[0] + " -- Password: " + this.dictionary.get(passwordArray[3])
-                                + "\nCrack Time: " + resultTime + " sec"
-                                + "\n******************************";
-
-                        System.out.println(result);
-                        this.results.add(result);
-                    } else {
-                        String result = "User: " + temp[0] + " -- Password: Not Found"
-                                + "\nCrack Time: " + resultTime + " sec"
-                                + "\n******************************";
-
-                        System.out.println(result);
-                        this.results.add(result);
-                    }
-
-                    this.writeToFile("result/result.txt");
                 }
             }
 

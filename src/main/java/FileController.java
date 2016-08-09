@@ -1,5 +1,6 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -7,14 +8,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * Created by Jennica on 31/07/2016.
  */
-public class FileController {
+public class FileController implements Initializable {
 
     private Stage primaryStage;
     private FileChooser fileChooser = new FileChooser();
@@ -133,5 +136,66 @@ public class FileController {
         resultStage.centerOnScreen();
         resultStage.setScene(scene);
         resultStage.show();
+    }
+
+    private void initializeDefaultChoiceBoxes() {
+        FilePathHandler readSaveFile = this.loadFilenames("save/savelist.txt");
+
+        this.addToChoiceBoxes(this.dictionaryChoiceBox, readSaveFile.getFilePaths().get(0));
+        this.addToChoiceBoxes(this.passwordChoiceBox, readSaveFile.getFilePaths().get(1));
+        this.addToChoiceBoxes(this.shadowChoiceBox, readSaveFile.getFilePaths().get(2));
+
+        this.dictionaryChoiceBox.getSelectionModel().select(this.dictionaryChoiceBox.getItems().get(readSaveFile.getSelectedIndexes().get(0)));
+        this.passwordChoiceBox.getSelectionModel().select(this.passwordChoiceBox.getItems().get(readSaveFile.getSelectedIndexes().get(1)));
+        this.shadowChoiceBox.getSelectionModel().select(this.shadowChoiceBox.getItems().get(readSaveFile.getSelectedIndexes().get(2)));
+    }
+
+    private void addToChoiceBoxes(ChoiceBox choiceBox, ArrayList<String> choices) {
+        for ( int x = 0; x < choices.size(); x++ ) {
+            choiceBox.getItems().add(choices.get(x));
+        }
+    }
+
+    private FilePathHandler loadFilenames(String filename) {
+        ArrayList<ArrayList<String>> completeFileNames = new ArrayList<>();
+        ArrayList<String> filepathList = null;
+        ArrayList<Integer> selectedIndexes = new ArrayList<>();
+
+        try ( BufferedReader br = new BufferedReader(new FileReader(filename)) ) {
+            String line = br.readLine();
+
+            while ( line != null ) {
+                boolean IsSkept = false;
+                if ( line.equals("/*StartOfFile*/") ) {
+                    filepathList = new ArrayList<>();
+                } else if ( line.equals("/*EndOfFile*/") ) {
+                    completeFileNames.add(filepathList);
+                } else if ( line.equals("Dictionary File") || line.equals("Linux Password File") ||
+                        line.equals("Shadow Password File") || line.equals("/*StartOfIndex*/") ||
+                        line.equals("/*EndOfIndex*/") ) {
+                    line = br.readLine();
+                    IsSkept = true;
+                } else if ( line.length() == 1 ) {
+                    selectedIndexes.add(Integer.parseInt(line));
+                } else {
+                    filepathList.add(line);
+                    System.out.println(line);
+                }
+                if ( !IsSkept ) {
+                    line = br.readLine();
+                }
+
+            }
+        } catch ( FileNotFoundException e ) {
+            e.printStackTrace();
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+        return new FilePathHandler(completeFileNames, selectedIndexes);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.initializeDefaultChoiceBoxes();
     }
 }

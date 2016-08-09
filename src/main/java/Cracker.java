@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Jennica on 31/07/2016.
@@ -18,10 +19,20 @@ public class Cracker {
     private ArrayList<String> users;
     private ArrayList<String> results;
 
+    private long startTime;
+    private long endTime;
+    private long elapsedTime;
+    private double runningTime;
+
     public Cracker() {
         this.dictionary = new Hashtable<>();
         this.users = new ArrayList<>();
         this.results = new ArrayList<>();
+
+        this.startTime = System.nanoTime();
+        this.endTime = 0;
+        this.elapsedTime = 0;
+        this.runningTime = 0.0;
     }
 
     public boolean build(ArrayList<String> filePaths) {
@@ -43,9 +54,6 @@ public class Cracker {
 
             while ( (account = br.readLine()) != null ) {
                 String[] temp = account.split(":");
-
-                // debugging
-//                System.out.println("temp[2] = " + temp[2]);
 
                 Float userId = Float.parseFloat(temp[2]);
                 if ( userId > 1000 && userId < 60000 ) {
@@ -72,6 +80,7 @@ public class Cracker {
 
     /**
      * Reading the Linux Shadow Password File containing the Salt & Hashed Passwords
+     *
      * @param shadowPath
      * @param dictionaryPath
      */
@@ -102,17 +111,31 @@ public class Cracker {
                         buildDictionaryTable(dictionaryPath, salt, tempType);
                     }
 
+                    this.endTime = System.nanoTime();
+                    this.elapsedTime = this.endTime - this.startTime;
+
+                    double convert = TimeUnit.MILLISECONDS
+                            .convert(this.elapsedTime, TimeUnit.NANOSECONDS) / 1000.0;
+                    double resultTime = convert - this.runningTime;
+                    this.runningTime = convert;
+
                     if ( this.dictionary.containsKey(passwordArray[3]) ) {
-                        String result = "User: " + temp[0] + " -- Password: " + this.dictionary.get(passwordArray[3]);
+                        String result = "User: " + temp[0] + " -- Password: " + this.dictionary.get(passwordArray[3])
+                                + "\nCrack Time: " + resultTime + " sec"
+                                + "\n******************************";
+
                         System.out.println(result);
                         this.results.add(result);
                     } else {
-                        String result = ("User: " + temp[0] + " -- Password: Not Found");
+                        String result = "User: " + temp[0] + " -- Password: Not Found"
+                                + "\nCrack Time: " + resultTime + " sec"
+                                + "\n******************************";
+
                         System.out.println(result);
                         this.results.add(result);
                     }
 
-                    this.writeToFile("result.txt");
+                    this.writeToFile("result/result.txt");
                 }
             }
 
@@ -134,6 +157,7 @@ public class Cracker {
 
     /**
      * Creating a dictonary that contains the different possible user account password
+     *
      * @param filepath
      * @param salt
      * @param type

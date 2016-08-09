@@ -1,0 +1,17 @@
+Dictionary File
+/*StartOfFile*/
+file/500-worst-passwords.txt
+/*EndOfFile*/
+Linux Password File
+/*StartOfFile*/
+file/passwd.txt
+/*EndOfFile*/
+Shadow Password File
+/*StartOfFile*/
+file/shadow.txt
+/*EndOfFile*/
+/*StartOfIndex*/
+0
+0
+0
+/*EndOfIndex*/

@@ -1,0 +1,9 @@
+User: optimus -- Password: zzzzzz
+Crack Time: 2.59 sec
+******************************
+User: megatron -- Password: juice
+Crack Time: 2.3550000000000004 sec
+******************************
+User: bumblebee -- Password: 123456
+Crack Time: 2.1309999999999993 sec
+******************************

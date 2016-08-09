@@ -5,6 +5,19 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+// Create a single Jar with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Linux Password Cracker',
+                'Implementation-Version': version,
+                'Main-Class': 'pwdcrckr'
+    }
+
+    baseName = "pwdcrckr"
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 repositories {
     mavenCentral()
 }

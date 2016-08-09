@@ -1,3 +1,0 @@
-User: optimus -- Password: zzzzzz
-User: megatron -- Password: juice
-User: bumblebee -- Password: 123456

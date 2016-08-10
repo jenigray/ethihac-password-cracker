@@ -124,16 +124,18 @@ public class Cracker {
                         this.runningTime = convert;
 
                         if ( this.dictionary.containsKey(passwordArray[3]) ) {
+                            String newLine = System.lineSeparator();
                             String result = "User: " + temp[0] + " -- Password: " + this.dictionary.get(passwordArray[3])
-                                    + "\nCrack Time: " + resultTime + " sec"
-                                    + "\n**************************************************";
+                                    + newLine + "Crack Time: " + resultTime + " sec"
+                                    + newLine + "**************************************************";
 
                             System.out.println(result);
                             this.results.add(result);
                         } else {
+                            String newLine = System.lineSeparator();
                             String result = "User: " + temp[0] + " -- Password: Not Found"
-                                    + "\nCrack Time: " + resultTime + " sec"
-                                    + "\n**************************************************";
+                                    + newLine + "Crack Time: " + resultTime + " sec"
+                                    + newLine + "**************************************************";
 
                             System.out.println(result);
                             this.results.add(result);
